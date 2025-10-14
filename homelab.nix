@@ -1,0 +1,99 @@
+{ pkgs, lib, ... }: {
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
+  networking.hostName = "alecglobaldev";
+
+  users.users.alec = { # Default user
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+  };
+
+  environment.systemPackages = with pkgs; [
+    git
+  ];
+
+  # Raspi boot
+  boot = {
+    loader = {
+      grub.enable = false;
+      generic-extlinux-compatible.enable = true;
+      timeout = 0; # Hold down space on boot to access menu
+    };
+    tmp.cleanOnBoot = true;
+    kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
+    initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" ];
+  };
+
+  
+
+  # Networking
+  networking = {
+    #firewall.allowedTCPPorts = [ 80 8080 ];
+    networkmanager.enable = true; # For nmtui
+  };
+
+  services = {
+    openssh.enable = true; # SSH support
+
+    code-server = {
+      enable = true;
+      user = "nocturn";
+      password = "1234";
+    };
+
+    # IP resolve shorthand for .local address
+    avahi = {
+      enable = true;
+      openFirewall = true;
+      publish = {
+        enable = true;
+        addresses = true; # For HTTP IP
+        userServices = true; # For NAS
+      };
+    };
+
+    # USB NAS
+    samba = {
+      enable = true;
+      package = pkgs.samba4Full; # Better autodiscovery support
+      openFirewall = true;
+      settings."USB" = {
+        path = "/media";
+        writable = true;
+        "valid users" = [ "alec" ];
+        "admin users" = [ "alec" ]; # Full read & write access
+      };
+    };
+    samba-wsdd = { # Auto-disovery
+      enable = true;
+      openFirewall = true;
+    };
+    journald.extraConfig = "SystemMaxUse=20M";
+  };
+
+  systemd.services."devmon" = { # Automatic device mounting 
+    wantedBy = [ "default.target" ];
+    path = with pkgs; [ udevil procps udisks2 which ];
+    # Mount all in client mode & continue mounting in daemon mode
+    script = ''
+      ${pkgs.udevil}/bin/devmon -a
+      ${pkgs.udevil}/bin/devmon
+    '';
+  };
+
+  time.timeZone = "America/Los_Angeles";
+  nix.settings = {
+    experimental-features = "nix-command flakes";
+    auto-optimise-store = true;
+    warn-dirty = false;
+  };
+  
+  # Some cleanup
+  documentation.enable = false;
+  environment.defaultPackages = lib.mkForce [];
+  programs.command-not-found.enable = false;
+}
+
+
