@@ -26,7 +26,7 @@
 
   # Networking
   networking = {
-    #firewall.allowedTCPPorts = [ 80 8080 ];
+    firewall.allowedTCPPorts = [ 80 ];
     networkmanager.enable = true; # For nmtui
   };
 
@@ -36,7 +36,10 @@
     code-server = {
       enable = true;
       user = "alec";
-      homeDir = "/media/sda1-usb-SanDisk_Ultra_4C/";
+      #homeDir = "/media/sda1-usb-SanDisk_Ultra_4C/";
+      disableTelemetry = true;
+      disableGettingStartedOverride = true;
+      port = 80;
     };
 
     # IP resolve shorthand for .local address
