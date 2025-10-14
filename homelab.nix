@@ -10,9 +10,7 @@
     extraGroups = [ "wheel" ];
   };
 
-  environment.systemPackages = with pkgs; [
-    git
-  ];
+  environment.systemPackages = with pkgs; [ git cloudflared ];
 
   # Raspi boot
   boot = {
@@ -24,9 +22,7 @@
     tmp.cleanOnBoot = true;
     kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
     initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" ];
-  };
-
-  
+  };  
 
   # Networking
   networking = {
@@ -39,8 +35,8 @@
 
     code-server = {
       enable = true;
-      user = "nocturn";
-      password = "1234";
+      user = "alec";
+      homeDir = "/media/sda1-usb-SanDisk_Ultra_4C/";
     };
 
     # IP resolve shorthand for .local address
