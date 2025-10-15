@@ -40,6 +40,7 @@
       disableTelemetry = true;
       disableGettingStartedOverride = true;
       port = 80;
+      host = "0.0.0.0";
     };
 
     # IP resolve shorthand for .local address
