@@ -26,7 +26,7 @@
 
   # Networking
   networking = {
-    firewall.allowedTCPPorts = [ 4444 ];
+    firewall.allowedTCPPorts = [ 80 ];
     networkmanager.enable = true; # For nmtui
   };
 
@@ -37,11 +37,11 @@
     code-server = {
       enable = true;
       user = "alec";
-      #homeDir = "/media/sda1-usb-SanDisk_Ultra_4C/";
       disableTelemetry = true;
       disableGettingStartedOverride = true;
-      #port = 80;
+      port = 80;
       host = "0.0.0.0";
+      programs.code-server.extensions = with pkgs.vscode-extensions; [ ms-vsliveshare.vsliveshare ];
     };
 
     # IP resolve shorthand for .local address
