@@ -41,7 +41,7 @@
       disableGettingStartedOverride = true;
       port = 80;
       host = "0.0.0.0";
-      programs.code-server.extensions = with pkgs.vscode-extensions; [ ms-vsliveshare.vsliveshare ];
+      extensions = with pkgs.vscode-extensions; [ ms-vsliveshare.vsliveshare ];
     };
 
     # IP resolve shorthand for .local address
