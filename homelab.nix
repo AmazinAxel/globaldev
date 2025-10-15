@@ -25,24 +25,11 @@
   };
 
   # Networking
-  networking = {
-    firewall.allowedTCPPorts = [ 80 ];
-    networkmanager.enable = true; # For nmtui
-  };
+  networking.networkmanager.enable = true; # For nmtui
 
   services = {
     openssh.enable = true; # SSH support
     devmon.enable = true;
-
-    code-server = {
-      enable = true;
-      user = "alec";
-      disableTelemetry = true;
-      disableGettingStartedOverride = true;
-      port = 80;
-      host = "0.0.0.0";
-      extensions = with pkgs.vscode-extensions; [ ms-vsliveshare.vsliveshare ];
-    };
 
     # IP resolve shorthand for .local address
     avahi = {
@@ -81,10 +68,12 @@
     warn-dirty = false;
   };
   
-  # Some cleanup
   documentation.enable = false;
   environment.defaultPackages = lib.mkForce [];
-  programs.command-not-found.enable = false;
+  programs = {
+    command-not-found.enable = false;
+    nix-ld.enable = true;
+  }
 }
 
 
