@@ -22,7 +22,7 @@
     tmp.cleanOnBoot = true;
     kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
     initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" ];
-  };  
+  };
 
   # Networking
   networking = {
@@ -32,6 +32,7 @@
 
   services = {
     openssh.enable = true; # SSH support
+    devmon.enable = true;
 
     code-server = {
       enable = true;
@@ -71,16 +72,6 @@
       openFirewall = true;
     };
     journald.extraConfig = "SystemMaxUse=20M";
-  };
-
-  systemd.services."devmon" = { # Automatic device mounting 
-    wantedBy = [ "default.target" ];
-    path = with pkgs; [ udevil procps udisks2 which ];
-    # Mount all in client mode & continue mounting in daemon mode
-    script = ''
-      ${pkgs.udevil}/bin/devmon -a
-      ${pkgs.udevil}/bin/devmon
-    '';
   };
 
   time.timeZone = "America/Los_Angeles";
