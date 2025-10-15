@@ -26,7 +26,7 @@
 
   # Networking
   networking = {
-    firewall.allowedTCPPorts = [ 80 ];
+    firewall.allowedTCPPorts = [ 4444 ];
     networkmanager.enable = true; # For nmtui
   };
 
@@ -39,7 +39,7 @@
       #homeDir = "/media/sda1-usb-SanDisk_Ultra_4C/";
       disableTelemetry = true;
       disableGettingStartedOverride = true;
-      port = 80;
+      #port = 80;
       host = "0.0.0.0";
     };
 
