@@ -75,5 +75,3 @@
     nix-ld.enable = true;
   };
 }
-
-
